@@ -52,6 +52,11 @@ class PlayingCard:
         return True if len(self.linked_lists) == dash else False
 
     def del_number(self, number):
+        """
+        Удаляет цифры на картах.
+        :param number: Цифра, которую нужно удалить.
+        :return: None
+        """
         for lists in self.numbers:
             if number in lists:
                 address = lists.index(number)
@@ -75,4 +80,4 @@ class Player:
 
 
 if __name__ == '__main__':
-    pass
+    print('Классы для игры Лото')

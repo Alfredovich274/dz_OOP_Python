@@ -4,9 +4,9 @@ from classes import Player
 
 def print_card(cards, name_player):
     """
-    Печатаем карточки
-    :param name_player:
-    :param cards: Словарь с картами
+    Выводит карточки.
+    :param name_player: Имя игрока.
+    :param cards: Словарь с картами.
     :return:
     """
     for key, val in cards.items():
@@ -21,6 +21,13 @@ def print_card(cards, name_player):
 
 
 def add_player(player, amount, player_type=False):
+    """
+    Инициализацию игрока и добавление карточек к нему.
+    :param player: Имя.
+    :param amount: Количество карточек.
+    :param player_type: Тип игрока, Человек или Компьютер.
+    :return: Словарь карт и имя игрока.
+    """
     name_play = f'Игрок {player} Человек' \
         if player_type else f'Игрок {player} Компьютер'
     comp = Player()
@@ -30,6 +37,13 @@ def add_player(player, amount, player_type=False):
 
 
 def check_cards(cards, number, del_number=False):
+    """
+    Проверка карточки на совпадение с боченком и удаление цифры, если нужно.
+    :param cards: Словарь карточек.
+    :param number: Цифра на боченке.
+    :param del_number: Флаг удаления цифры true - удалить.
+    :return: True False.
+    """
     result = []
     for key in cards.keys():
         if number in cards[key].linked_lists:
@@ -42,6 +56,13 @@ def check_cards(cards, number, del_number=False):
 
 
 def step_player(player_cards, move, answer=''):
+    """
+    Проверка игрока на каждом шаге.
+    :param player_cards: Карты, словарь.
+    :param move: Цифра на боченке.
+    :param answer: Ответ игрока об удалении цифры.
+    :return: True False.
+    """
     if answer == 'y':
         if check_cards(player_cards, move):
             check_cards(player_cards, next_move, del_number=True)
@@ -53,6 +74,11 @@ def step_player(player_cards, move, answer=''):
 
 
 def game_over(cards):
+    """
+    Проверка полностью зачеркнутой карточки.
+    :param cards: Словарь с картами.
+    :return: True False.
+    """
     result = []
     for key in cards.keys():
         result.append(True) if cards[key].game_check() else result.append(False)
