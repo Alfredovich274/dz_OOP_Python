@@ -6,6 +6,9 @@ import random
 
 
 class PlayingCard:
+    """
+    Класс Карта
+    """
     def __init__(self):
         self.numbers = []
         self.linked_lists = []
@@ -31,52 +34,57 @@ class PlayingCard:
                         self.numbers[i][j] = number
                         break
 
-    def number_check(self, number):
-        """
-        Проверяет, есть ли такая цифра.
-        :param number: Цифра, которую нужно проверить.
-        :return: Возвращает True если цифра есть в карточке,
-        False - если цифры в карточке нет.
-        """
-        return True if number in self.linked_lists else False
-
-    def game_check(self):
-        """
-        Проверяет есть ли еще не закрытые цифры.
-        :return: True - все закрыты.
-        """
-        dash = 0
-        for numbers in self.numbers:
-            dash += numbers.count('-')
-            dash += numbers.count('- ')
-        return True if len(self.linked_lists) == dash else False
-
-    def del_number(self, number):
-        """
-        Удаляет цифры на картах.
-        :param number: Цифра, которую нужно удалить.
-        :return: None
-        """
-        for lists in self.numbers:
-            if number in lists:
-                address = lists.index(number)
-                lists[address] = '-' if address == 0 else '- '
-
 
 class Player:
+    """
+    Класс Игрок
+    """
     def __init__(self):
         self.num_card = 1
         self.cards = {}
+        self.name = ''
 
-    def app_card(self, amount=1):
+    def app_cards(self, amount=1):
         """
-        Добавляет карту для игры.
+        Добавляет карту или карты для игры.
+        :param amount: Сколько карт нужно добавить.
         :return: Массив 3 на 9 с цифрами и '-', где цифры нет.
         """
         for i in range(amount):
             card = PlayingCard()
             card.filling()
             self.cards[f'Карточка {i+1}'] = card
+
+    def barrel_check(self, barrel_number, del_number=False):
+        """
+        Проверяет, есть ли такая цифра.
+        :param del_number: Нужно ли удалять цифру при проверке, True - нужно.
+        :param barrel_number: Цифра, которую нужно проверить.
+        :return: Возвращает True если цифра есть в карточке,
+        False - если цифра в карточке/карточках нет.
+        """
+        result = []
+        for val in self.cards.values():
+            for value in val.numbers:
+                result.append(True if barrel_number in value else False)
+                if barrel_number in value and del_number:
+                    address = value.index(barrel_number)
+                    value[address] = '-' if address == 0 else '- '
+        return True if True in result else False
+
+    def game_check(self):
+        """
+        Проверяет есть ли еще не закрытые цифры.
+        :return: True - все закрыты, конец игре
+        """
+        result = []
+        for key, val in self.cards.items():
+            dash = 0
+            for value in val.numbers:
+                dash += value.count('-')
+                dash += value.count('- ')
+            result.append(True if dash == 15 else False)
+        return True if True in result else False
 
 
 if __name__ == '__main__':
