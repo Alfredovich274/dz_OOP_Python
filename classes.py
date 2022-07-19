@@ -40,7 +40,7 @@ class Player:
     Класс Игрок
     """
     def __init__(self):
-        self.num_card = 1
+        # self.num_card = 1
         self.cards = {}
         self.name = ''
 
