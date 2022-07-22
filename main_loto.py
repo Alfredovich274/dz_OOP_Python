@@ -1,5 +1,5 @@
 import random
-from classes import Player
+from player import Player
 
 
 def print_card(cards, name_player):
@@ -12,8 +12,7 @@ def print_card(cards, name_player):
     for key, val in cards.items():
         print(name_player, key)
         print('- ' * 13)
-        num = list(val.numbers)
-        for x in num:
+        for x in val:
             for i, y in enumerate(x):
                 print((' ' if i == 0 else '  ') if y == '_' else y, end=' ')
             print()
@@ -60,15 +59,15 @@ def auto_check(player, move):
     :param move: Цифра
     :return: None
     """
-    if player.barrel_check(move):
+    # TODO
+    if move in player:
         player.barrel_check(move, del_number=True)
+    # if player.barrel_check(move):
+    #     player.barrel_check(move, del_number=True)
 
 
 if __name__ == '__main__':
-    game = False
-    moves = [i for i in range(1, 91)]
-    random.shuffle(moves)
-    game_moves = (i for i in moves)
+
     print('== Игра Лото ==')
     print('1 - Выбрать игроков;\n'
           '2 - Начать игру;\n'
@@ -127,63 +126,66 @@ if __name__ == '__main__':
                 print_card(two_player.cards, two_player.name)
 
         elif menu == 2:
-            break
-    steps = 0
-    while True:
-        print_card(one_player.cards, one_player.name)
-        print('# ' * 15)
-        print_card(two_player.cards, two_player.name)
-        try:
-            next_move = next(game_moves)
-        except StopIteration:
-            break
-        steps += 1
-        print(f'Ход № {steps}, Выпал боченок № {next_move}')
-        if player_menu == 1:
-            auto_check(one_player, next_move)
-            in_del = ''
-            while in_del != 'y' and in_del != 'n':
-                in_del = input(f'Ход {two_player.name}.'
-                               f' Зачеркнуть цифру? (y/n) ')
-            if not step_player(two_player, next_move, answer=in_del):
-                print(f'{two_player.name}, Вы проиграли')
-                break
-        elif player_menu == 2:
-            auto_check(one_player, next_move)
-            auto_check(two_player, next_move)
-        elif player_menu == 3:
-            in_del = ''
-            while in_del != 'y' and in_del != 'n':
-                in_del = input(f'Ход {one_player.name}.'
-                               f' Зачеркнуть цифру? (y/n) ')
-            if not step_player(one_player, next_move, answer=in_del):
-                print(f'Игрок {one_player.name}, Вы проиграли')
-                break
-            in_del = ''
-            while in_del != 'y' and in_del != 'n':
-                in_del = input(f'Ход {two_player.name}.'
-                               f' Зачеркнуть цифру? (y/n) ')
-            if not step_player(two_player, next_move, answer=in_del):
-                print(f'Игрок {two_player.name}, Вы проиграли')
-                break
+            game = False
+            moves = [i for i in range(1, 91)]
+            random.shuffle(moves)
+            game_moves = (i for i in moves)
+            steps = 0
+            while True:
+                print_card(one_player.cards, one_player.name)
+                print('# ' * 15)
+                print_card(two_player.cards, two_player.name)
+                try:
+                    next_move = next(game_moves)
+                except StopIteration:
+                    break
+                steps += 1
+                print(f'Ход № {steps}, Выпал боченок № {next_move}')
+                if player_menu == 1:
+                    auto_check(one_player, next_move)
+                    in_del = ''
+                    while in_del != 'y' and in_del != 'n':
+                        in_del = input(f'Ход {two_player.name}.'
+                                       f' Зачеркнуть цифру? (y/n) ')
+                    if not step_player(two_player, next_move, answer=in_del):
+                        print(f'{two_player.name}, Вы проиграли')
+                        break
+                elif player_menu == 2:
+                    auto_check(one_player, next_move)
+                    auto_check(two_player, next_move)
+                elif player_menu == 3:
+                    in_del = ''
+                    while in_del != 'y' and in_del != 'n':
+                        in_del = input(f'Ход {one_player.name}.'
+                                       f' Зачеркнуть цифру? (y/n) ')
+                    if not step_player(one_player, next_move, answer=in_del):
+                        print(f'Игрок {one_player.name}, Вы проиграли')
+                        break
+                    in_del = ''
+                    while in_del != 'y' and in_del != 'n':
+                        in_del = input(f'Ход {two_player.name}.'
+                                       f' Зачеркнуть цифру? (y/n) ')
+                    if not step_player(two_player, next_move, answer=in_del):
+                        print(f'Игрок {two_player.name}, Вы проиграли')
+                        break
 
-        if one_player.game_check() and two_player.game_check():
-            print_card(one_player.cards, one_player.name)
-            print('# ' * 15)
-            print_card(two_player.cards, two_player.name)
-            print(f'Это ничья!')
-            break
-        elif one_player.game_check():
-            print_card(one_player.cards, one_player.name)
-            print('# ' * 15)
-            print_card(two_player.cards, two_player.name)
-            print(f'Выиграл {one_player.name}')
-            break
-        elif two_player.game_check():
-            print_card(one_player.cards, one_player.name)
-            print('# ' * 15)
-            print_card(two_player.cards, two_player.name)
-            print(f'Выиграл {two_player.name}')
-            break
+                if one_player.game_check() and two_player.game_check():
+                    print_card(one_player.cards, one_player.name)
+                    print('# ' * 15)
+                    print_card(two_player.cards, two_player.name)
+                    print(f'Это ничья!')
+                    break
+                elif one_player.game_check():
+                    print_card(one_player.cards, one_player.name)
+                    print('# ' * 15)
+                    print_card(two_player.cards, two_player.name)
+                    print(f'Выиграл {one_player.name}')
+                    break
+                elif two_player.game_check():
+                    print_card(one_player.cards, one_player.name)
+                    print('# ' * 15)
+                    print_card(two_player.cards, two_player.name)
+                    print(f'Выиграл {two_player.name}')
+                    break
 
     print('Конец игры')
